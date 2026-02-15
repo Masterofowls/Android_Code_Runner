@@ -1,0 +1,43 @@
+[package]
+name = "code-runner"
+version = "1.0.0"
+description = "Advanced TypeScript/Rust Android Code Runner with Tauri backend"
+authors = ["Code Runner Team <dev@coderunner.app>"]
+license = "MIT"
+repository = "https://github.com/coderunner/android-code-runner"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+# Core Tauri
+tauri = { version = "2.0", features = [] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# System integration
+anyhow = "1.0"
+thiserror = "1.0"
+log = "0.4"
+env_logger = "0.11"
+
+# File system operations
+walkdir = "2.4"
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = ["codegen"] }
+
+[[example]]
+name = "api"
+path = "examples/api.rs"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

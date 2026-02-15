@@ -1,0 +1,25 @@
+{
+  "productName": "Code Runner",
+  "version": "1.0.0",
+  "identifier": "com.coderunner.app",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 600,
+        "resizable": true,
+        "title": "Android Code Runner",
+        "width": 800
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
+}

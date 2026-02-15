@@ -1,0 +1,45 @@
+node_modules/
+dist/
+.env
+.env.local
+.DS_Store
+*.log
+.vscode/settings.json
+target/
+build/
+.gradle/
+.idea/
+*.apk
+*.aab
+.tauri/
+
+# Environment variables
+.env.example
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+.Next
+out/
+.nuxt
+dist/
+
+# Dependencies
+npm-debug.log
+yarn-error.log
+pnpm-error.log
+/QUICKSTART.md
+/SETUP.md
