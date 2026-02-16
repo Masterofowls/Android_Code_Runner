@@ -2,15 +2,15 @@ import type { Language } from '../types/language'
 
 export const LANGUAGE_CONFIG: Record<
   Language,
-  { name: string; icon: string; monacoLanguage: string }
+  { name: string; icon: string; monacoLanguage: string; extension: string }
 > = {
-  javascript: { name: 'JavaScript', icon: '{}', monacoLanguage: 'javascript' },
-  typescript: { name: 'TypeScript', icon: 'T', monacoLanguage: 'typescript' },
-  python: { name: 'Python', icon: 'Py', monacoLanguage: 'python' },
-  c: { name: 'C', icon: 'C', monacoLanguage: 'c' },
-  cpp: { name: 'C++', icon: '++', monacoLanguage: 'cpp' },
-  sql: { name: 'SQL', icon: 'DB', monacoLanguage: 'sql' },
-  bash: { name: 'Bash', icon: '$', monacoLanguage: 'bash' },
+  javascript: { name: 'JavaScript', icon: '{}', monacoLanguage: 'javascript', extension: 'js' },
+  typescript: { name: 'TypeScript', icon: 'T', monacoLanguage: 'typescript', extension: 'ts' },
+  python: { name: 'Python', icon: 'Py', monacoLanguage: 'python', extension: 'py' },
+  c: { name: 'C', icon: 'C', monacoLanguage: 'c', extension: 'c' },
+  cpp: { name: 'C++', icon: '++', monacoLanguage: 'cpp', extension: 'cpp' },
+  sql: { name: 'SQL', icon: 'DB', monacoLanguage: 'sql', extension: 'sql' },
+  bash: { name: 'Bash', icon: '$', monacoLanguage: 'bash', extension: 'sh' },
 }
 
 export const SYNTAX_EXAMPLES: Record<Language, string> = {
@@ -30,42 +30,30 @@ interface User {
 const user: User = { name: "John", age: 30 };
 console.log(user);`,
   python: `# Python Example
-def fibonacci(n):
-    if n <= 1:
-        return n
-    return fibonacci(n-1) + fibonacci(n-2)
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
 
-print(fibonacci(10))`,
+print(factorial(5))`,
   c: `// C Example
 #include <stdio.h>
 
-int fibonacci(int n) {
-  if (n <= 1) return n;
-  return fibonacci(n-1) + fibonacci(n-2);
-}
-
 int main() {
-  printf("%d\\n", fibonacci(10));
-  return 0;
+    printf("Hello, World!\\n");
+    return 0;
 }`,
   cpp: `// C++ Example
 #include <iostream>
 
-int fibonacci(int n) {
-  if (n <= 1) return n;
-  return fibonacci(n-1) + fibonacci(n-2);
-}
-
 int main() {
-  std::cout << fibonacci(10) << std::endl;
-  return 0;
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
 }`,
   sql: `-- SQL Example
-SELECT * FROM users WHERE age > 18;`,
-  bash: `#!/bin/bash
-# Bash Example
-echo "Hello, World!"
-for i in {1..5}; do
-  echo "Number: $i"
-done`,
+SELECT * FROM users WHERE active = 1;`,
+  bash: `# Bash Example
+echo "Hello from Bash"
+ls -la`,
 }

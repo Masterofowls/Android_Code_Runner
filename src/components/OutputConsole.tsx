@@ -1,108 +1,97 @@
-import {
-  AlertCircle as ErrorIcon,
-  Loader2,
-  CheckCircle as SuccessIcon,
-  Terminal,
-} from 'lucide-react'
+import { Check, Copy, Terminal, Trash2, X } from 'lucide-react'
+import { useState } from 'react'
 
 interface OutputConsoleProps {
   output: string
-  error: string
+  error?: string
   isRunning: boolean
+  onClear: () => void
+  onClose: () => void
+  visible: boolean
 }
 
-export default function OutputConsole({ output, error, isRunning }: OutputConsoleProps) {
+export default function OutputConsole({
+  output,
+  error,
+  isRunning,
+  onClear,
+  onClose,
+  visible,
+}: OutputConsoleProps) {
+  const [copied, setCopied] = useState(false)
+
+  if (!visible) return null
+
+  const handleCopy = async () => {
+    const textToCopy = error || output
+    if (!textToCopy) return
+
+    try {
+      await navigator.clipboard.writeText(textToCopy)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy console output:', err)
+    }
+  }
+
+  const handleClear = () => {
+    if (output || error) {
+      if (confirm('Clear console output?')) {
+        onClear()
+      }
+    }
+  }
+
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full bg-[#1e1e1e] border-t border-[#333]">
       {/* Header */}
-      <div
-        className="flex-none flex items-center gap-2 px-4 py-2.5 border-b border-[var(--glass-border)]"
-        style={{ background: 'var(--editor-line-bg)' }}
-      >
-        {isRunning ? (
-          <>
-            <Loader2 size={14} className="text-[var(--warning)] spinner" />
-            <span className="text-sm font-semibold text-[var(--warning)]">Running...</span>
-          </>
-        ) : error ? (
-          <>
-            <ErrorIcon size={14} className="text-[var(--error)]" />
-            <span className="text-sm font-semibold text-[var(--error)]">Error</span>
-          </>
-        ) : output ? (
-          <>
-            <SuccessIcon size={14} className="text-[var(--success)]" />
-            <span className="text-sm font-semibold text-[var(--success)]">Output</span>
-          </>
-        ) : (
-          <>
-            <Terminal size={14} className="text-[var(--text-muted)]" />
-            <span className="text-sm font-semibold text-[var(--text-muted)]">Console</span>
-          </>
-        )}
+      <div className="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-[#333]">
+        <div className="flex items-center gap-2">
+          <Terminal size={14} className="text-gray-400" />
+          <span className="text-xs font-medium text-gray-300 uppercase tracking-wider">
+            Console
+          </span>
+          {isRunning && (
+            <span className="text-xs text-yellow-500 ml-2 animate-pulse">● Running...</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleCopy}
+            disabled={!output && !error}
+            className="p-1 hover:bg-[#333] rounded text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Copy Output"
+          >
+            {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+          </button>
+          <button
+            onClick={handleClear}
+            disabled={!output && !error}
+            className="p-1 hover:bg-[#333] rounded text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Clear"
+          >
+            <Trash2 size={14} />
+          </button>
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-[#333] rounded text-gray-400 hover:text-white"
+            title="Close"
+          >
+            <X size={14} />
+          </button>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-auto p-4">
-        {/* Empty state */}
-        {!output && !error && !isRunning && (
-          <div className="flex flex-col items-center justify-center h-full text-center gap-3 opacity-50">
-            <Terminal size={32} className="text-[var(--text-muted)]" />
-            <p className="text-[var(--text-muted)] text-sm">Run your code to see output here</p>
-          </div>
-        )}
-
-        {/* Running state */}
-        {isRunning && (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="w-10 h-10 rounded-full border-2 border-[var(--accent-from)] border-t-transparent spinner" />
-            <p className="text-[var(--text-secondary)] text-sm font-medium">Executing code...</p>
-          </div>
-        )}
-
-        {/* Error output */}
-        {error && (
-          <div
-            className="rounded-xl p-3.5"
-            style={{
-              background: 'var(--error-bg)',
-              border: '1px solid rgba(239, 68, 68, 0.2)',
-            }}
-          >
-            <pre
-              className="text-sm whitespace-pre-wrap break-words"
-              style={{
-                color: '#fca5a5',
-                fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', monospace",
-                fontSize: '0.8125rem',
-                lineHeight: '1.6',
-              }}
-            >
-              {error}
-            </pre>
-          </div>
-        )}
-
-        {/* Success output */}
-        {output && !isRunning && (
-          <div
-            className="rounded-xl p-3.5"
-            style={{
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--glass-border)',
-            }}
-          >
-            <pre
-              className="text-sm whitespace-pre-wrap break-words"
-              style={{
-                color: '#86efac',
-                fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', monospace",
-                fontSize: '0.8125rem',
-                lineHeight: '1.6',
-              }}
-            >
-              {output}
-            </pre>
+      {/* Output Area */}
+      <div className="flex-1 p-4 font-mono text-sm overflow-auto whitespace-pre-wrap">
+        {error ? (
+          <div className="text-red-400">{error}</div>
+        ) : output ? (
+          <div className="text-gray-300">{output}</div>
+        ) : (
+          <div className="text-gray-600 italic">
+            No output to display. Run your code to see results.
           </div>
         )}
       </div>

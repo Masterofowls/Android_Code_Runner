@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { Language } from '../types/language'
+import { DEFAULT_GREETINGS } from '../utils/defaultGreetings'
 
 interface CodeStore {
   code: string
@@ -9,10 +10,7 @@ interface CodeStore {
 }
 
 export const useCodeStore = create<CodeStore>((set) => ({
-  code: `// Welcome to Code Runner!
-// Select a language and start coding...
-
-console.log('Hello, World!');`,
+  code: DEFAULT_GREETINGS.javascript,
   language: 'javascript',
   setCode: (code) => set({ code }),
   setLanguage: (language) => set({ language }),

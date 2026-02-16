@@ -17,7 +17,20 @@ const DEFAULT_SETTINGS: AppSettings = {
 const STORAGE_KEY = 'code-runner-settings'
 
 export function useAppSettings() {
-  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
+  const [settings, setSettings] = useState<AppSettings>(() => {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    return stored ? JSON.parse(stored) : DEFAULT_SETTINGS
+  })
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
+    // Sync theme with DOM
+    if (settings.theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [settings])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
