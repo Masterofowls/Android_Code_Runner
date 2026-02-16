@@ -4,6 +4,8 @@ export const LANGUAGE_CONFIG = {
     python: { name: 'Python', icon: 'Py', monacoLanguage: 'python' },
     c: { name: 'C', icon: 'C', monacoLanguage: 'c' },
     cpp: { name: 'C++', icon: '++', monacoLanguage: 'cpp' },
+    sql: { name: 'SQL', icon: 'DB', monacoLanguage: 'sql' },
+    bash: { name: 'Bash', icon: '$', monacoLanguage: 'bash' },
 };
 export const SYNTAX_EXAMPLES = {
     javascript: `// JavaScript Example
@@ -52,4 +54,12 @@ int main() {
   std::cout << fibonacci(10) << std::endl;
   return 0;
 }`,
+    sql: `-- SQL Example
+SELECT * FROM users WHERE age > 18;`,
+    bash: `#!/bin/bash
+# Bash Example
+echo "Hello, World!"
+for i in {1..5}; do
+  echo "Number: $i"
+done`,
 };

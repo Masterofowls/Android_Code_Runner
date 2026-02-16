@@ -1,4 +1,6 @@
-import { forwardRef, useEffect, useRef, type ReactElement } from 'react'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css'
+import { forwardRef, useEffect, useRef, useState, type ReactElement } from 'react'
 import type { Language } from '../types/language'
 
 interface CodeEditorProps {
@@ -7,40 +9,144 @@ interface CodeEditorProps {
   onChange: (code: string) => void
 }
 
+const languageMap: { [key in Language]: string } = {
+  javascript: 'javascript',
+  typescript: 'typescript',
+  python: 'python',
+  c: 'c',
+  cpp: 'cpp',
+  sql: 'sql',
+  bash: 'bash',
+}
+
 const CodeEditor = forwardRef<HTMLTextAreaElement, CodeEditorProps>(
-  ({ code, onChange }: CodeEditorProps, ref): ReactElement => {
-    const localRef = useRef<HTMLTextAreaElement>(null)
-    const editorRef = (ref as any) || localRef
+  ({ code, language, onChange }: CodeEditorProps, ref): ReactElement => {
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
+    const highlightRef = useRef<HTMLPreElement>(null)
+    const lineNumbersRef = useRef<HTMLDivElement>(null)
+    const [lineCount, setLineCount] = useState(1)
 
-    useEffect(() => {
-      // Load Monaco Editor dynamically
-      const script = document.createElement('script')
-      script.src =
-        'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.50.0/min/vs/loader.min.js'
-      document.head.appendChild(script)
-
-      return () => {
-        document.head.removeChild(script)
+    const syncScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
+      const target = e.target as HTMLTextAreaElement
+      if (highlightRef.current) {
+        highlightRef.current.scrollTop = target.scrollTop
+        highlightRef.current.scrollLeft = target.scrollLeft
       }
-    }, [])
-
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      onChange(e.target.value)
+      if (lineNumbersRef.current) {
+        lineNumbersRef.current.scrollTop = target.scrollTop
+      }
     }
 
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const value = e.target.value
+      onChange(value)
+      updateHighlight(value)
+    }
+
+    const updateHighlight = (text: string) => {
+      if (highlightRef.current) {
+        try {
+          const highlighted = hljs.highlight(text, {
+            language: languageMap[language] || 'plaintext',
+            ignoreIllegals: true,
+          }).value
+          highlightRef.current.innerHTML = highlighted
+          setLineCount(text.split('\n').length)
+        } catch (e) {
+          highlightRef.current.textContent = text
+        }
+      }
+    }
+
+    useEffect(() => {
+      updateHighlight(code)
+    }, [code, language])
+
+    useEffect(() => {
+      if (textareaRef.current) {
+        ;(ref as any).current = textareaRef.current
+      }
+    }, [ref])
+
     return (
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <div className="flex-1 overflow-auto bg-gray-950">
+      <div className="flex h-full overflow-hidden" style={{ background: 'var(--editor-bg)' }}>
+        {/* Line Numbers */}
+        <div
+          ref={lineNumbersRef}
+          className="flex-shrink-0 select-none overflow-hidden"
+          style={{
+            background: 'var(--editor-gutter)',
+            color: 'var(--text-muted)',
+            paddingTop: '0.75rem',
+            paddingBottom: '0.75rem',
+            paddingRight: '0.75rem',
+            paddingLeft: '0.5rem',
+            fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace",
+            fontSize: '0.8125rem',
+            lineHeight: '1.7',
+            textAlign: 'right',
+            minWidth: '42px',
+            borderRight: '1px solid var(--glass-border)',
+          }}
+        >
+          {Array.from({ length: lineCount }, (_, i) => (
+            <div
+              key={i + 1}
+              style={{
+                opacity: 0.5,
+                transition: 'opacity 0.15s',
+              }}
+            >
+              {i + 1}
+            </div>
+          ))}
+        </div>
+
+        {/* Editor Area */}
+        <div className="flex-1 relative overflow-hidden">
+          {/* Syntax Highlight Layer */}
+          <pre
+            ref={highlightRef}
+            className="absolute inset-0 m-0 overflow-hidden pointer-events-none"
+            style={{
+              padding: '0.75rem',
+              background: 'var(--editor-bg)',
+              color: '#c9d1d9',
+              fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace",
+              fontSize: '0.8125rem',
+              lineHeight: '1.7',
+              whiteSpace: 'pre-wrap',
+              wordWrap: 'break-word',
+              zIndex: 1,
+            }}
+          />
+
+          {/* Textarea Input Layer */}
           <textarea
-            ref={editorRef as React.Ref<HTMLTextAreaElement>}
+            ref={textareaRef}
             value={code}
             onChange={handleChange}
-            className="w-full h-full p-4 bg-gray-950 text-gray-100 font-mono text-sm border-0 outline-none resize-none"
+            onScroll={syncScroll}
             spellCheck="false"
             wrap="soft"
+            className="focus-glow"
             style={{
-              fontFamily: "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
-              lineHeight: '1.6',
+              position: 'absolute',
+              inset: 0,
+              margin: 0,
+              padding: '0.75rem',
+              backgroundColor: 'transparent',
+              color: 'transparent',
+              caretColor: 'var(--editor-cursor)',
+              fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace",
+              fontSize: '0.8125rem',
+              lineHeight: '1.7',
+              border: 'none',
+              outline: 'none',
+              resize: 'none',
+              zIndex: 2,
+              width: '100%',
+              height: '100%',
               tabSize: 2,
             }}
           />

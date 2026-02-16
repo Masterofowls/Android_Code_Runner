@@ -1,4 +1,4 @@
-export type Language = 'javascript' | 'typescript' | 'python' | 'c' | 'cpp'
+export type Language = 'javascript' | 'typescript' | 'python' | 'c' | 'cpp' | 'sql' | 'bash'
 
 export interface ExecutionResult {
   output: string

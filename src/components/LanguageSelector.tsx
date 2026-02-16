@@ -1,31 +1,91 @@
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react'
+import { ChevronDown } from 'lucide-react'
 import { useMemo } from 'react'
 import type { Language } from '../types/language'
-import { LANGUAGE_CONFIG } from '../utils/languageConfig'
 
 interface LanguageSelectorProps {
   language: Language
   onLanguageChange: (language: Language) => void
 }
 
+const languageColors: Record<Language, string> = {
+  javascript: '#f7df1e',
+  typescript: '#3178c6',
+  python: '#3776ab',
+  c: '#a89968',
+  cpp: '#00599c',
+  sql: '#336791',
+  bash: '#4eaa25',
+}
+
+const languageNames: Record<Language, string> = {
+  javascript: 'JavaScript',
+  typescript: 'TypeScript',
+  python: 'Python',
+  c: 'C',
+  cpp: 'C++',
+  sql: 'SQL',
+  bash: 'Bash',
+}
+
 export default function LanguageSelector({ language, onLanguageChange }: LanguageSelectorProps) {
   const languages = useMemo((): Language[] => {
-    return ['javascript', 'typescript', 'python', 'c', 'cpp']
+    return ['javascript', 'typescript', 'python', 'c', 'cpp', 'sql', 'bash']
   }, [])
 
   return (
-    <div className="flex gap-2 items-center">
-      <label className="text-gray-300 text-sm font-medium">Language:</label>
-      <select
-        value={language}
-        onChange={(e) => onLanguageChange(e.target.value as Language)}
-        className="px-3 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-secondary"
+    <Dropdown backdrop="blur">
+      <DropdownTrigger>
+        <button
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-semibold transition-all hover:bg-[var(--bg-elevated)]"
+          style={{
+            background: 'var(--bg-surface)',
+            color: 'var(--text-primary)',
+            border: '1px solid var(--glass-border)',
+          }}
+        >
+          <span
+            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+            style={{ backgroundColor: languageColors[language] }}
+          />
+          <span className="hidden sm:inline">{languageNames[language]}</span>
+          <span className="sm:hidden">
+            {language === 'javascript'
+              ? 'JS'
+              : language === 'typescript'
+                ? 'TS'
+                : languageNames[language]}
+          </span>
+          <ChevronDown size={14} className="text-[var(--text-muted)]" />
+        </button>
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label="Language selection"
+        className="min-w-[160px]"
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--glass-border)',
+          borderRadius: 'var(--radius-md)',
+        }}
+        onAction={(key) => onLanguageChange(key as Language)}
+        selectedKeys={[language]}
+        selectionMode="single"
       >
         {languages.map((lang) => (
-          <option key={lang} value={lang}>
-            {LANGUAGE_CONFIG[lang].name}
-          </option>
+          <DropdownItem
+            key={lang}
+            className="data-[hover=true]:bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-lg"
+            startContent={
+              <span
+                className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                style={{ backgroundColor: languageColors[lang] }}
+              />
+            }
+          >
+            {languageNames[lang]}
+          </DropdownItem>
         ))}
-      </select>
-    </div>
+      </DropdownMenu>
+    </Dropdown>
   )
 }

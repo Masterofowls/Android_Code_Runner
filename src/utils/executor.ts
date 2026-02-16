@@ -1,13 +1,12 @@
 import type { ExecutionResult, Language } from '../types/language'
+import { executeBash } from './runners/bash'
 import { executeC } from './runners/c'
 import { executeCpp } from './runners/cpp'
 import { executeJavaScript } from './runners/javascript'
 import { executePython } from './runners/python'
+import { executeSql } from './runners/sql'
 
-export async function executeCode(
-  code: string,
-  language: Language
-): Promise<ExecutionResult> {
+export async function executeCode(code: string, language: Language): Promise<ExecutionResult> {
   try {
     switch (language) {
       case 'javascript':
@@ -19,6 +18,10 @@ export async function executeCode(
         return await executeC(code)
       case 'cpp':
         return await executeCpp(code)
+      case 'sql':
+        return await executeSql(code)
+      case 'bash':
+        return await executeBash(code)
       default:
         return { output: '', error: 'Language not supported' }
     }

@@ -1,4 +1,10 @@
-import { Clipboard, Copy, Play, Trash2 } from 'lucide-react'
+import { Tooltip } from '@heroui/react'
+import {
+  Trash2 as ClearIcon,
+  Copy as CopyIcon,
+  Clipboard as PasteIcon,
+  Play as PlayIcon,
+} from 'lucide-react'
 import type { Language } from '../types/language'
 
 interface ToolbarProps {
@@ -10,6 +16,16 @@ interface ToolbarProps {
   language: Language
 }
 
+const languageColors: Record<Language, string> = {
+  javascript: '#f7df1e',
+  typescript: '#3178c6',
+  python: '#3776ab',
+  c: '#a89968',
+  cpp: '#00599c',
+  sql: '#336791',
+  bash: '#4eaa25',
+}
+
 export default function Toolbar({
   onRun,
   onCopy,
@@ -19,44 +35,79 @@ export default function Toolbar({
   language,
 }: ToolbarProps) {
   return (
-    <div className="flex items-center gap-2 px-4 py-3 bg-gray-900 border-b border-gray-700 flex-shrink-0 flex-wrap">
-      <button
-        onClick={onRun}
-        disabled={isRunning}
-        className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        title="Run code (Ctrl+Enter)"
-      >
-        <Play size={18} />
-        <span className="hidden sm:inline">{isRunning ? 'Running...' : 'Run'}</span>
-      </button>
+    <div
+      className="flex-none flex items-center justify-between px-3 py-2 border-b border-[var(--glass-border)]"
+      style={{ background: 'var(--editor-line-bg)' }}
+    >
+      {/* Left: Run + Language badge */}
+      <div className="flex items-center gap-2.5">
+        {/* Run Button (desktop only — mobile uses FAB) */}
+        <Tooltip content={`Run (Ctrl+Enter)`}>
+          <button
+            onClick={onRun}
+            disabled={isRunning}
+            className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition-all active:scale-95 disabled:opacity-50 btn-accent"
+          >
+            {isRunning ? (
+              <>
+                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full spinner" />
+                Running
+              </>
+            ) : (
+              <>
+                <PlayIcon size={14} />
+                Run
+              </>
+            )}
+          </button>
+        </Tooltip>
 
-      <div className="w-px h-6 bg-gray-700 hidden sm:block" />
+        {/* Language Badge */}
+        <div
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide"
+          style={{
+            background: 'var(--bg-surface)',
+            color: 'var(--text-secondary)',
+            border: '1px solid var(--glass-border)',
+          }}
+        >
+          <span
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: languageColors[language] }}
+          />
+          {language}
+        </div>
+      </div>
 
-      <button
-        onClick={onCopy}
-        className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
-        title="Copy code"
-      >
-        <Copy size={18} />
-      </button>
+      {/* Right: Action buttons */}
+      <div className="flex items-center gap-1">
+        <Tooltip content="Copy code">
+          <button
+            onClick={onCopy}
+            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all"
+          >
+            <CopyIcon size={15} />
+          </button>
+        </Tooltip>
 
-      <button
-        onClick={onPaste}
-        className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
-        title="Paste code"
-      >
-        <Clipboard size={18} />
-      </button>
+        <Tooltip content="Paste code">
+          <button
+            onClick={onPaste}
+            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all"
+          >
+            <PasteIcon size={15} />
+          </button>
+        </Tooltip>
 
-      <button
-        onClick={onClear}
-        className="p-2 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors"
-        title="Clear code and output"
-      >
-        <Trash2 size={18} />
-      </button>
-
-      <div className="ml-auto text-xs text-gray-400 hidden sm:block">{language.toUpperCase()}</div>
+        <Tooltip content="Clear">
+          <button
+            onClick={onClear}
+            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--error)] hover:bg-[var(--error-bg)] transition-all"
+          >
+            <ClearIcon size={15} />
+          </button>
+        </Tooltip>
+      </div>
     </div>
   )
 }
