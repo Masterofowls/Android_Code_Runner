@@ -103,7 +103,7 @@ test.describe('Code Runner - UI and Mobile Responsiveness', () => {
     await page.fill('textarea', longCode)
 
     await page.locator('textarea').evaluate((el) => {
-      ;(el as HTMLTextAreaElement).scrollTop = 100
+      (el as HTMLTextAreaElement).scrollTop = 100
     })
 
     const scrollTop = await page

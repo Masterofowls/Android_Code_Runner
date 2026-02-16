@@ -111,27 +111,27 @@ function App() {
     <div className="flex flex-col h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
       {/* ─── Header ─── */}
       <header
-        className="flex-none px-4 md:px-6 py-3 border-b border-[var(--glass-border)]"
+        className="flex-none px-4 md:px-6 py-3.5 border-b border-[var(--glass-border)]"
         style={{
           background: 'linear-gradient(180deg, rgba(17,24,39,0.95) 0%, rgba(10,14,23,0.95) 100%)',
         }}
       >
         <div className="flex items-center justify-between gap-3">
           {/* Logo */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg"
+              className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
               style={{
                 background: 'linear-gradient(135deg, var(--accent-from), var(--accent-to))',
               }}
             >
-              <Code2 size={18} className="text-white" />
+              <Code2 size={20} className="text-white" strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
-              <h1 className="text-base md:text-lg font-bold tracking-tight text-[var(--text-primary)]">
+              <h1 className="text-lg md:text-xl font-bold tracking-tight text-[var(--text-primary)]">
                 Code Runner
               </h1>
-              <span className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-widest hidden sm:block">
+              <span className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-widest hidden sm:block">
                 Mobile IDE
               </span>
             </div>
@@ -146,37 +146,37 @@ function App() {
       <div className="flex md:hidden border-b border-[var(--glass-border)] bg-[var(--bg-secondary)]">
         <button
           onClick={() => setMobileTab('editor')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold transition-colors relative ${
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold transition-all relative ${
             mobileTab === 'editor'
               ? 'text-[var(--text-accent)]'
               : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
           }`}
         >
-          <Code2 size={15} />
-          Editor
+          <Code2 size={16} />
+          <span className="tracking-wide">Editor</span>
           {mobileTab === 'editor' && (
             <span
-              className="absolute bottom-0 left-1/4 right-1/4 h-0.5 rounded-full tab-indicator"
+              className="absolute bottom-0 left-0 right-0 h-1 rounded-t-full tab-indicator"
               style={{ background: 'linear-gradient(90deg, var(--accent-from), var(--accent-to))' }}
             />
           )}
         </button>
         <button
           onClick={() => setMobileTab('output')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold transition-colors relative ${
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-bold transition-all relative ${
             mobileTab === 'output'
               ? 'text-[var(--text-accent)]'
               : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
           }`}
         >
-          <Terminal size={15} />
-          Output
+          <Terminal size={16} />
+          <span className="tracking-wide">Output</span>
           {(output || error) && mobileTab !== 'output' && (
-            <span className="w-2 h-2 rounded-full bg-[var(--success)] animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[var(--success)] animate-pulse absolute top-2 right-6" />
           )}
           {mobileTab === 'output' && (
             <span
-              className="absolute bottom-0 left-1/4 right-1/4 h-0.5 rounded-full tab-indicator"
+              className="absolute bottom-0 left-0 right-0 h-1 rounded-t-full tab-indicator"
               style={{ background: 'linear-gradient(90deg, var(--accent-from), var(--accent-to))' }}
             />
           )}
@@ -222,16 +222,17 @@ function App() {
           <button
             onClick={handleRun}
             disabled={isRunning}
-            className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all active:scale-95 disabled:opacity-60 btn-accent"
+            className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl transition-all active:scale-95 disabled:opacity-60 btn-accent"
             style={{
-              boxShadow: '0 4px 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.15)',
+              boxShadow: '0 8px 32px rgba(59, 130, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.2)',
+              border: '2px solid rgba(255, 255, 255, 0.1)',
             }}
           >
             {isRunning ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full spinner" />
+              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full spinner" />
             ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                <polygon points="5,3 19,12 5,21" />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <polygon points="7,4 20,12 7,20" />
               </svg>
             )}
           </button>

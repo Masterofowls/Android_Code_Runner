@@ -313,6 +313,17 @@ body {
   body {
     overflow: hidden;
   }
+
+  /* Larger font for better mobile readability */
+  .editor-container {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  /* Improve touch target sizes */
+  button {
+    min-height: 44px;
+  }
 }
 
 /* Ensure flex containers fill available space */

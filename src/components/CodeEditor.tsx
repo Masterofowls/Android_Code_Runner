@@ -64,7 +64,7 @@ const CodeEditor = forwardRef<HTMLTextAreaElement, CodeEditorProps>(
 
     useEffect(() => {
       if (textareaRef.current) {
-        ;(ref as any).current = textareaRef.current
+        (ref as any).current = textareaRef.current
       }
     }, [ref])
 
@@ -77,15 +77,15 @@ const CodeEditor = forwardRef<HTMLTextAreaElement, CodeEditorProps>(
           style={{
             background: 'var(--editor-gutter)',
             color: 'var(--text-muted)',
-            paddingTop: '0.75rem',
-            paddingBottom: '0.75rem',
-            paddingRight: '0.75rem',
-            paddingLeft: '0.5rem',
+            paddingTop: '1rem',
+            paddingBottom: '1rem',
+            paddingRight: '0.875rem',
+            paddingLeft: '0.75rem',
             fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace",
-            fontSize: '0.8125rem',
-            lineHeight: '1.7',
+            fontSize: 'clamp(0.875rem, 4vw, 0.9375rem)',
+            lineHeight: '1.8',
             textAlign: 'right',
-            minWidth: '42px',
+            minWidth: '48px',
             borderRight: '1px solid var(--glass-border)',
           }}
         >
@@ -109,12 +109,12 @@ const CodeEditor = forwardRef<HTMLTextAreaElement, CodeEditorProps>(
             ref={highlightRef}
             className="absolute inset-0 m-0 overflow-hidden pointer-events-none"
             style={{
-              padding: '0.75rem',
+              padding: '1rem',
               background: 'var(--editor-bg)',
               color: '#c9d1d9',
               fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace",
-              fontSize: '0.8125rem',
-              lineHeight: '1.7',
+              fontSize: 'clamp(0.875rem, 4vw, 0.9375rem)',
+              lineHeight: '1.8',
               whiteSpace: 'pre-wrap',
               wordWrap: 'break-word',
               zIndex: 1,
@@ -134,13 +134,13 @@ const CodeEditor = forwardRef<HTMLTextAreaElement, CodeEditorProps>(
               position: 'absolute',
               inset: 0,
               margin: 0,
-              padding: '0.75rem',
+              padding: '1rem',
               backgroundColor: 'transparent',
               color: 'transparent',
               caretColor: 'var(--editor-cursor)',
               fontFamily: "'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Consolas', monospace",
-              fontSize: '0.8125rem',
-              lineHeight: '1.7',
+              fontSize: 'clamp(0.875rem, 4vw, 0.9375rem)',
+              lineHeight: '1.8',
               border: 'none',
               outline: 'none',
               resize: 'none',

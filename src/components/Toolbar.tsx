@@ -36,17 +36,17 @@ export default function Toolbar({
 }: ToolbarProps) {
   return (
     <div
-      className="flex-none flex items-center justify-between px-3 py-2 border-b border-[var(--glass-border)]"
+      className="flex-none flex items-center justify-between px-3.5 py-2.5 border-b border-[var(--glass-border)]"
       style={{ background: 'var(--editor-line-bg)' }}
     >
       {/* Left: Run + Language badge */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-3">
         {/* Run Button (desktop only — mobile uses FAB) */}
         <Tooltip content={`Run (Ctrl+Enter)`}>
           <button
             onClick={onRun}
             disabled={isRunning}
-            className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold text-white transition-all active:scale-95 disabled:opacity-50 btn-accent"
+            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all active:scale-95 disabled:opacity-50 btn-accent"
           >
             {isRunning ? (
               <>
@@ -64,7 +64,7 @@ export default function Toolbar({
 
         {/* Language Badge */}
         <div
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wide"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider"
           style={{
             background: 'var(--bg-surface)',
             color: 'var(--text-secondary)',
@@ -72,7 +72,7 @@ export default function Toolbar({
           }}
         >
           <span
-            className="w-2 h-2 rounded-full"
+            className="w-2.5 h-2.5 rounded-full"
             style={{ backgroundColor: languageColors[language] }}
           />
           {language}
@@ -80,31 +80,31 @@ export default function Toolbar({
       </div>
 
       {/* Right: Action buttons */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         <Tooltip content="Copy code">
           <button
             onClick={onCopy}
-            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all"
+            className="p-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all active:scale-95"
           >
-            <CopyIcon size={15} />
+            <CopyIcon size={16} />
           </button>
         </Tooltip>
 
         <Tooltip content="Paste code">
           <button
             onClick={onPaste}
-            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all"
+            className="p-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all active:scale-95"
           >
-            <PasteIcon size={15} />
+            <PasteIcon size={16} />
           </button>
         </Tooltip>
 
         <Tooltip content="Clear">
           <button
             onClick={onClear}
-            className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--error)] hover:bg-[var(--error-bg)] transition-all"
+            className="p-2.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--error)] hover:bg-[var(--error-bg)] transition-all active:scale-95"
           >
-            <ClearIcon size={15} />
+            <ClearIcon size={16} />
           </button>
         </Tooltip>
       </div>
